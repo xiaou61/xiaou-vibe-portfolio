@@ -1,4 +1,5 @@
 import {
+  Activity,
   ArrowUpRight,
   Blocks,
   Braces,
@@ -18,7 +19,7 @@ import {
   Star,
   type LucideIcon,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type Project = {
   title: string;
@@ -239,6 +240,12 @@ const stackItems = [
   'Vite',
 ];
 
+const experienceNotes = [
+  '首屏切换项目焦点',
+  '更强的 hover 层次与动效反馈',
+  '作品叙事从“列表”升级成“展示台”',
+];
+
 function copyText(value: string) {
   if (navigator.clipboard?.writeText) {
     return navigator.clipboard.writeText(value);
@@ -258,6 +265,9 @@ function copyText(value: string) {
 
 function App() {
   const [copied, setCopied] = useState<string | null>(null);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const heroImages = useMemo(
     () => [
@@ -267,6 +277,28 @@ function App() {
     ],
     [],
   );
+  const activeProject = projects[activeProjectIndex];
+
+  useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      setPointer({ x: event.clientX, y: event.clientY });
+    };
+
+    const handleScroll = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleCopy = async (key: string, value: string) => {
     await copyText(value);
@@ -276,6 +308,10 @@ function App() {
 
   return (
     <main id="top" className="site-shell">
+      <div className="scroll-progress" aria-hidden="true">
+        <span style={{ transform: `scaleX(${Math.max(scrollProgress, 0.02)})` }} />
+      </div>
+      <div className="cursor-glow" aria-hidden="true" style={{ left: pointer.x, top: pointer.y }} />
       <div className="ambient-grid" aria-hidden="true" />
       <div className="scanline" aria-hidden="true" />
 
@@ -320,6 +356,20 @@ function App() {
             这里用来收纳我做过、上线过、开源过的小项目：从 700+ Star 的 Code-Nest，到毕设源码合集、宣传转化网站，再到已经可在线使用的粉桃打字课。
           </p>
 
+          <div className="hero-project-switcher" aria-label="项目快速切换">
+            {projects.map((project, index) => (
+              <button
+                key={project.title}
+                type="button"
+                className={index === activeProjectIndex ? 'is-active' : undefined}
+                onClick={() => setActiveProjectIndex(index)}
+              >
+                <span>{`0${index + 1}`}</span>
+                <strong>{project.title}</strong>
+              </button>
+            ))}
+          </div>
+
           <div className="hero-signals" aria-label="作品集亮点">
             {heroSignals.map((signal) => {
               const Icon = signal.icon;
@@ -357,7 +407,82 @@ function App() {
               <dt>20+</dt>
               <dd>模块级工程沉淀</dd>
             </div>
+            <div>
+              <dt>Live</dt>
+              <dd>Projects + Delivery</dd>
+            </div>
           </dl>
+        </div>
+
+        <aside className={`hero-console accent-${activeProject.accent}`} aria-label="当前焦点项目">
+          <div className="hero-console-head">
+            <div>
+              <p>Focus Project</p>
+              <h2>{activeProject.title}</h2>
+            </div>
+            <span>{activeProject.eyebrow}</span>
+          </div>
+
+          <div className="hero-console-preview">
+            <img src={activeProject.image} alt={activeProject.imageAlt} />
+          </div>
+
+          <p className="hero-console-summary">{activeProject.summary}</p>
+
+          <div className="hero-console-metrics" aria-label="焦点项目指标">
+            {activeProject.stats.map((stat) => (
+              <div key={stat.label}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="hero-console-notes">
+            {experienceNotes.map((note) => (
+              <div key={note}>
+                <Activity size={16} />
+                <span>{note}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="hero-console-links">
+            {activeProject.links.map((link) => {
+              const Icon = link.icon;
+              return (
+                <a key={link.href} href={link.href} target="_blank" rel="noreferrer">
+                  <Icon size={16} />
+                  {link.label}
+                </a>
+              );
+            })}
+          </div>
+        </aside>
+      </section>
+
+      <section className="section-block showcase-band" aria-label="展示策略">
+        <div className="showcase-copy">
+          <p className="section-kicker">Showcase Mode</p>
+          <h2>不只是放链接，而是把项目做成可浏览、可比较、可感知的展示页。</h2>
+        </div>
+
+        <div className="showcase-matrix">
+          <article>
+            <span>01</span>
+            <strong>项目分层</strong>
+            <p>开源、资源库、上线产品分开讲，让别人一眼看懂你会做什么。</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>动效引导</strong>
+            <p>把注意力从首屏、项目卡片、联系方式逐段带过去，页面更有记忆点。</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>交付视角</strong>
+            <p>既展示代码能力，也展示上线、咨询转化和产品包装能力。</p>
+          </article>
         </div>
       </section>
 
@@ -367,9 +492,31 @@ function App() {
           <h2>首批上线作品</h2>
         </div>
 
+        <div className="project-rail" aria-label="项目切换导航">
+          {projects.map((project, index) => (
+            <button
+              key={project.title}
+              type="button"
+              className={index === activeProjectIndex ? `rail-${project.accent} is-active` : `rail-${project.accent}`}
+              onMouseEnter={() => setActiveProjectIndex(index)}
+              onFocus={() => setActiveProjectIndex(index)}
+              onClick={() => setActiveProjectIndex(index)}
+            >
+              <span>{`0${index + 1}`}</span>
+              <strong>{project.title}</strong>
+              <small>{project.source}</small>
+            </button>
+          ))}
+        </div>
+
         <div className="project-grid">
           {projects.map((project, index) => (
-            <article key={project.title} className={`project-card accent-${project.accent}`}>
+            <article
+              key={project.title}
+              className={`project-card accent-${project.accent} ${index === activeProjectIndex ? 'is-active' : ''}`}
+              onMouseEnter={() => setActiveProjectIndex(index)}
+              onFocus={() => setActiveProjectIndex(index)}
+            >
               <span className="project-number">0{index + 1}</span>
               <div className="project-image">
                 <img src={project.image} alt={project.imageAlt} loading="eager" />
@@ -448,6 +595,15 @@ function App() {
         <div className="stack-marquee" aria-label="技术栈">
           {stackItems.map((item) => (
             <span key={item}>{item}</span>
+          ))}
+        </div>
+
+        <div className="motion-strip" aria-label="页面体验升级">
+          {experienceNotes.map((item) => (
+            <div key={item}>
+              <Sparkles size={16} />
+              <span>{item}</span>
+            </div>
           ))}
         </div>
       </section>

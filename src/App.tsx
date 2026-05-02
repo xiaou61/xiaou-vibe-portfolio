@@ -119,6 +119,31 @@ const projects: Project[] = [
     links: [{ label: '访问网站', href: 'http://36.140.150.167:8000/', icon: ExternalLink }],
     accent: 'cyan',
   },
+  {
+    title: '粉桃打字课',
+    eyebrow: '上线产品 / Typing Practice App',
+    summary:
+      '一个面向中文、英文、混合与自定义内容的在线打字练习程序，提供课程分类、难度筛选、进度统计、速度准确率面板和自由练习模式。',
+    image: '/project-peach-typing-practice.png',
+    imageAlt: '粉桃打字课页面截图',
+    source: 'Live Site',
+    stats: [
+      { label: 'Modes', value: '4' },
+      { label: 'Type', value: '在线练习' },
+      { label: 'Focus', value: '打字训练' },
+    ],
+    tags: ['Typing Practice', '中文打字', '英文打字', '混合练习', '自定义文本', '在线工具'],
+    highlights: [
+      '支持中文、英文、混合与自定义文本练习',
+      '课程库、难度、进度、WPM 与准确率信息一屏可见',
+      '适合作为轻量工具型产品展示上线能力与交互完成度',
+    ],
+    links: [
+      { label: '访问网站', href: 'http://36.140.150.167:8003/', icon: ExternalLink },
+      { label: '查看 GitHub', href: 'https://github.com/xiaou61/peach-typing-practice', icon: Github },
+    ],
+    accent: 'amber',
+  },
 ];
 
 const capabilityCards = [
@@ -237,7 +262,7 @@ function App() {
   const heroImages = useMemo(
     () => [
       projects[0].image,
-      'https://opengraph.githubassets.com/xiaou-vibe-portfolio/xiaou61/Code-Nest',
+      '/project-peach-typing-practice.png',
       '/project-biye-site.png',
     ],
     [],
@@ -292,7 +317,7 @@ function App() {
             <span>作品展台</span>
           </h1>
           <p className="hero-lead">
-            这里用来收纳我做过、上线过、开源过的小项目：从 700+ Star 的 Code-Nest，到毕设源码合集，再到能直接转化咨询的宣传网站。
+            这里用来收纳我做过、上线过、开源过的小项目：从 700+ Star 的 Code-Nest，到毕设源码合集、宣传转化网站，再到已经可在线使用的粉桃打字课。
           </p>
 
           <div className="hero-signals" aria-label="作品集亮点">
@@ -325,8 +350,8 @@ function App() {
               <dd>Code-Nest Stars</dd>
             </div>
             <div>
-              <dt>3</dt>
-              <dd>首批展示项目</dd>
+              <dt>4</dt>
+              <dd>当前展示项目</dd>
             </div>
             <div>
               <dt>20+</dt>

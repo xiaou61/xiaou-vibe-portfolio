@@ -80,9 +80,9 @@ const projects: Project[] = [
     eyebrow: '毕设源码合集 / Graduation Design Library',
     summary:
       '计算机专业 2026 最新毕设源码合集，覆盖 Spring Boot、Vue、Java、小程序、Python 等方向，适合选题、演示、部署与二次开发沉淀。',
-    image: 'https://opengraph.githubassets.com/xiaou-vibe-portfolio/xiaou61/2026-bs',
-    imageAlt: '2026-bs GitHub 仓库预览',
-    source: 'GitHub Repository',
+    image: '/project-2026-bs-generated.png',
+    imageAlt: '2026-bs 作品集封面图',
+    source: 'Portfolio Cover',
     stats: [
       { label: 'Focus', value: '毕设源码' },
       { label: 'Stacks', value: '5+' },

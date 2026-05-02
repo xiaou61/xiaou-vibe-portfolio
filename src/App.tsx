@@ -116,7 +116,7 @@ const projects: Project[] = [
       '联系入口前置，适合移动端快速咨询',
       '把源码合集与服务说明做成可直接转化的产品页面',
     ],
-    links: [{ label: '访问网站', href: 'http://36.140.150.167:8001/', icon: ExternalLink }],
+    links: [{ label: '访问网站', href: 'http://36.140.150.167:8000/', icon: ExternalLink }],
     accent: 'cyan',
   },
 ];

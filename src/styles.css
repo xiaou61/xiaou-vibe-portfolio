@@ -13,6 +13,7 @@
   --ice: #eaf7ff;
   --amber: #ffb02e;
   --green: #1ecb86;
+  --mint: #0f9f7b;
   --shadow: 0 28px 90px rgba(7, 52, 118, 0.16);
   font-family: "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei", "PingFang SC", sans-serif;
   background: var(--bg);
@@ -731,6 +732,13 @@ img {
     rgba(255, 255, 255, 0.8);
 }
 
+.hero-console.accent-mint {
+  border-color: rgba(15, 159, 123, 0.24);
+  background:
+    linear-gradient(155deg, rgba(15, 159, 123, 0.16), rgba(255, 255, 255, 0.82) 36%),
+    rgba(255, 255, 255, 0.8);
+}
+
 .hero-console.accent-amber .hero-console-head p,
 .hero-console.accent-amber .hero-console-metrics strong {
   color: #c77a00;
@@ -739,6 +747,11 @@ img {
 .hero-console.accent-cyan .hero-console-head p,
 .hero-console.accent-cyan .hero-console-metrics strong {
   color: #0083c7;
+}
+
+.hero-console.accent-mint .hero-console-head p,
+.hero-console.accent-mint .hero-console-metrics strong {
+  color: #08785d;
 }
 
 .section-block {
@@ -841,7 +854,7 @@ img {
 
 .project-rail {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -861,6 +874,10 @@ img {
 
 .rail-cyan.is-active {
   box-shadow: 0 16px 40px rgba(24, 200, 255, 0.18);
+}
+
+.rail-mint.is-active {
+  box-shadow: 0 16px 40px rgba(15, 159, 123, 0.16);
 }
 
 .project-card {
@@ -923,6 +940,10 @@ img {
 
 .project-card.accent-cyan::before {
   background: linear-gradient(180deg, var(--cyan), var(--blue));
+}
+
+.project-card.accent-mint::before {
+  background: linear-gradient(180deg, var(--mint), #98e6bf);
 }
 
 .project-number {
@@ -1049,6 +1070,11 @@ img {
 .project-card.accent-cyan .project-stats dt,
 .project-card.accent-cyan .project-eyebrow {
   color: #0083c7;
+}
+
+.project-card.accent-mint .project-stats dt,
+.project-card.accent-mint .project-eyebrow {
+  color: #08785d;
 }
 
 .project-highlights {

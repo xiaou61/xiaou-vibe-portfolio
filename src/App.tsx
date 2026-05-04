@@ -32,7 +32,7 @@ type Project = {
   tags: string[];
   highlights: string[];
   links: Array<{ label: string; href: string; icon: LucideIcon }>;
-  accent: 'green' | 'amber' | 'cyan';
+  accent: 'green' | 'amber' | 'cyan' | 'mint';
 };
 
 type Contact = {
@@ -144,6 +144,28 @@ const projects: Project[] = [
       { label: '查看 GitHub', href: 'https://github.com/xiaou61/peach-typing-practice', icon: Github },
     ],
     accent: 'amber',
+  },
+  {
+    title: '双非上岸八股学习站',
+    eyebrow: '上线产品 / Interview Study Site',
+    summary:
+      '面向 Java 后端面试准备的八股题库学习站，围绕高频题、路线覆盖、学习进度和题解模板组织内容，让复习过程从刷题入口到掌握统计形成闭环。',
+    image: '/project-you-deserve-study.png',
+    imageAlt: '双非上岸八股学习站首页截图',
+    source: 'Live Site',
+    stats: [
+      { label: 'Questions', value: '400' },
+      { label: 'Topics', value: '14' },
+      { label: 'Flow', value: '路线 / 复习' },
+    ],
+    tags: ['Java 后端', '八股题库', '面试复习', '学习路线', '题解模板', '进度追踪'],
+    highlights: [
+      '首页聚合高频面试题、路线覆盖和学习进度',
+      '按一句话结论、通俗解释、面试回答、追问、易错点组织题解',
+      '适合作为 Java 后端上岸复习与题库型产品展示',
+    ],
+    links: [{ label: '访问网站', href: 'http://36.140.150.167:8004/', icon: ExternalLink }],
+    accent: 'mint',
   },
 ];
 
@@ -272,8 +294,8 @@ function App() {
   const heroImages = useMemo(
     () => [
       projects[0].image,
+      '/project-you-deserve-study.png',
       '/project-peach-typing-practice.png',
-      '/project-biye-site.png',
     ],
     [],
   );
@@ -353,7 +375,7 @@ function App() {
             <span>作品展台</span>
           </h1>
           <p className="hero-lead">
-            这里用来收纳我做过、上线过、开源过的小项目：从 700+ Star 的 Code-Nest，到毕设源码合集、宣传转化网站，再到已经可在线使用的粉桃打字课。
+            这里用来收纳我做过、上线过、开源过的小项目：从 700+ Star 的 Code-Nest，到毕设源码合集、宣传转化网站、粉桃打字课，再到双非上岸八股学习站。
           </p>
 
           <div className="hero-project-switcher" aria-label="项目快速切换">
@@ -400,7 +422,7 @@ function App() {
               <dd>Code-Nest Stars</dd>
             </div>
             <div>
-              <dt>4</dt>
+              <dt>5</dt>
               <dd>当前展示项目</dd>
             </div>
             <div>

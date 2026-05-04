@@ -18,6 +18,7 @@ def check_page(page, url: str, screenshot_name: str) -> None:
     expect(page.get_by_text("Code-Nest").first).to_be_visible()
     expect(page.get_by_text("2026-bs").first).to_be_visible()
     expect(page.get_by_text("毕设宣传网站").first).to_be_visible()
+    expect(page.get_by_text("双非上岸八股学习站").first).to_be_visible()
     expect(page.get_by_text("3153566913").first).to_be_visible()
     expect(page.get_by_text("17713088356").first).to_be_visible()
 

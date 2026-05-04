@@ -483,31 +483,6 @@ function App() {
         </aside>
       </section>
 
-      <section className="section-block showcase-band" aria-label="展示策略">
-        <div className="showcase-copy">
-          <p className="section-kicker">Showcase Mode</p>
-          <h2>不只是放链接，而是把项目做成可浏览、可比较、可感知的展示页。</h2>
-        </div>
-
-        <div className="showcase-matrix">
-          <article>
-            <span>01</span>
-            <strong>项目分层</strong>
-            <p>开源、资源库、上线产品分开讲，让别人一眼看懂你会做什么。</p>
-          </article>
-          <article>
-            <span>02</span>
-            <strong>动效引导</strong>
-            <p>把注意力从首屏、项目卡片、联系方式逐段带过去，页面更有记忆点。</p>
-          </article>
-          <article>
-            <span>03</span>
-            <strong>交付视角</strong>
-            <p>既展示代码能力，也展示上线、咨询转化和产品包装能力。</p>
-          </article>
-        </div>
-      </section>
-
       <section id="projects" className="section-block projects-section">
         <div className="section-heading">
           <p className="section-kicker">Featured Projects</p>

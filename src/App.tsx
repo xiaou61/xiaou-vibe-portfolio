@@ -28,6 +28,7 @@ type Project = {
   image: string;
   imageAlt: string;
   source: string;
+  sourceHref?: string;
   stats: Array<{ label: string; value: string }>;
   tags: string[];
   highlights: string[];
@@ -44,6 +45,8 @@ type Contact = {
   href?: string;
 };
 
+type ThemeId = 'ocean' | 'midnight' | 'sunset' | 'forest';
+
 const owner = {
   name: 'xiaou',
   qq: '3153566913',
@@ -51,6 +54,48 @@ const owner = {
   email: '3153566913@qq.com',
   github: 'https://github.com/xiaou61',
 };
+
+const themeStorageKey = 'xiaou-theme';
+
+const themeOptions: Array<{
+  id: ThemeId;
+  label: string;
+  hint: string;
+  swatch: string;
+}> = [
+  { id: 'ocean', label: '海洋', hint: '清透蓝', swatch: '#096dff' },
+  { id: 'midnight', label: '午夜', hint: '深色', swatch: '#66d9ff' },
+  { id: 'sunset', label: '日落', hint: '暖橘', swatch: '#ff7b45' },
+  { id: 'forest', label: '森林', hint: '自然绿', swatch: '#1ea66d' },
+];
+
+const themeMetaColor: Record<ThemeId, string> = {
+  ocean: '#f4faff',
+  midnight: '#06101f',
+  sunset: '#fff7f1',
+  forest: '#f2faf4',
+};
+
+function isThemeId(value: string | null): value is ThemeId {
+  return themeOptions.some((theme) => theme.id === value);
+}
+
+function getInitialTheme(): ThemeId {
+  if (typeof window === 'undefined') {
+    return 'ocean';
+  }
+
+  try {
+    const savedTheme = window.localStorage.getItem(themeStorageKey);
+    if (isThemeId(savedTheme)) {
+      return savedTheme;
+    }
+  } catch {
+    // Ignore storage failures and fall back to system preference.
+  }
+
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'midnight' : 'ocean';
+}
 
 // 项目数据集中在这里，后续新增作品直接追加一个对象即可。
 const projects: Project[] = [
@@ -166,6 +211,32 @@ const projects: Project[] = [
     ],
     links: [{ label: '访问网站', href: 'http://36.140.150.167:8004/', icon: ExternalLink }],
     accent: 'mint',
+  },
+  {
+    title: '留白手帐',
+    eyebrow: '上线产品 / Personal Journal Dashboard',
+    summary:
+      '一个给自己用的个人记录网站，把登录、明日待办、每日记录、标签体系、全局搜索和近 7 天周回顾整合成轻量但完整的个人记录后台。',
+    image: '/project-liubai-journal.png',
+    imageAlt: '留白手帐概览页截图',
+    source: 'Live Site + GitHub',
+    sourceHref: 'https://github.com/xiaou61/liubai-journal',
+    stats: [
+      { label: 'Modules', value: '7+' },
+      { label: 'Stack', value: 'Next 16' },
+      { label: 'Data', value: '记录 / 待办' },
+    ],
+    tags: ['Next.js 16', 'TypeScript', 'Prisma', 'MySQL', 'Server Actions', '个人记录'],
+    highlights: [
+      '覆盖注册登录、明日待办、每日记录与最近完成概览',
+      '支持标签体系、关键词搜索与标签过滤',
+      '自动生成近 7 天周回顾与高频标签摘要',
+    ],
+    links: [
+      { label: '访问网站', href: 'http://36.140.150.167:8007/', icon: ExternalLink },
+      { label: '查看 GitHub', href: 'https://github.com/xiaou61/liubai-journal', icon: Github },
+    ],
+    accent: 'cyan',
   },
 ];
 
@@ -290,6 +361,7 @@ function App() {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [theme, setTheme] = useState<ThemeId>(getInitialTheme);
 
   const heroImages = useMemo(
     () => [
@@ -300,6 +372,7 @@ function App() {
     [],
   );
   const activeProject = projects[activeProjectIndex];
+  const liveProjectCount = projects.length;
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -321,6 +394,23 @@ function App() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme === 'midnight' ? 'dark' : 'light';
+
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) {
+      themeColor.setAttribute('content', themeMetaColor[theme]);
+    }
+
+    try {
+      window.localStorage.setItem(themeStorageKey, theme);
+    } catch {
+      // Ignore persistence failures.
+    }
+  }, [theme]);
 
   const handleCopy = async (key: string, value: string) => {
     await copyText(value);
@@ -352,10 +442,31 @@ function App() {
             </a>
           ))}
         </nav>
-        <a className="header-link" href={owner.github} target="_blank" rel="noreferrer">
-          <Github size={17} />
-          GitHub
-        </a>
+        <div className="header-actions">
+          <div className="theme-switcher" role="group" aria-label="主题切换">
+            {themeOptions.map((option) => {
+              const active = option.id === theme;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={active ? 'theme-chip is-active' : 'theme-chip'}
+                  onClick={() => setTheme(option.id)}
+                  aria-pressed={active}
+                  aria-label={`切换到${option.label}主题`}
+                  title={option.hint}
+                >
+                  <span className="theme-chip-swatch" style={{ background: option.swatch }} />
+                  <strong>{option.label}</strong>
+                </button>
+              );
+            })}
+          </div>
+          <a className="header-link" href={owner.github} target="_blank" rel="noreferrer">
+            <Github size={17} />
+            GitHub
+          </a>
+        </div>
       </header>
 
       <section className="hero">
@@ -375,7 +486,7 @@ function App() {
             <span>作品展台</span>
           </h1>
           <p className="hero-lead">
-            这里用来收纳我做过、上线过、开源过的小项目：从 700+ Star 的 Code-Nest，到毕设源码合集、宣传转化网站、粉桃打字课，再到双非上岸八股学习站。
+            这里用来收纳我做过、上线过、开源过的小项目：从 700+ Star 的 Code-Nest，到毕设源码合集、宣传转化网站、粉桃打字课、双非上岸八股学习站，再到留白手帐。
           </p>
 
           <div className="hero-project-switcher" aria-label="项目快速切换">
@@ -422,7 +533,7 @@ function App() {
               <dd>Code-Nest Stars</dd>
             </div>
             <div>
-              <dt>5</dt>
+              <dt>{liveProjectCount}</dt>
               <dd>当前展示项目</dd>
             </div>
             <div>
@@ -517,7 +628,13 @@ function App() {
               <span className="project-number">0{index + 1}</span>
               <div className="project-image">
                 <img src={project.image} alt={project.imageAlt} loading="eager" />
-                <span className="project-source">{project.source}</span>
+                {project.sourceHref ? (
+                  <a className="project-source" href={project.sourceHref} target="_blank" rel="noreferrer">
+                    {project.source}
+                  </a>
+                ) : (
+                  <span className="project-source">{project.source}</span>
+                )}
               </div>
 
               <div className="project-body">
